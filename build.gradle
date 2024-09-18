@@ -23,6 +23,22 @@ subprojects {
         archivesName = "$rootProject.archives_name-$project.name"
     }
 
+    processResources {
+        def replaceProperties = [
+                mod_id: mod_id,
+                version: mod_version,
+                name: mod_name,
+                description: mod_description,
+                license: mod_license
+        ]
+
+        inputs.properties(replaceProperties)
+
+        filesMatching(['META-INF/mods.toml', 'pack.mcmeta', 'fabric.mod.json']) {
+            expand replaceProperties
+        }
+    }
+
     repositories {
         maven {
             name = "Blamejared Maven"
@@ -31,6 +47,10 @@ subprojects {
         maven {
             name = "ParchmentMC"
             url = "https://maven.parchmentmc.org"
+        }
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/"
         }
     }
 

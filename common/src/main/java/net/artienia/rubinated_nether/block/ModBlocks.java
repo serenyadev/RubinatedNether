@@ -106,7 +106,7 @@ public class ModBlocks {
     .Properties.copy(Blocks.COPPER_BLOCK)
     .noOcclusion()
     ));
-    public static final RegistrySupplier<Block> RUBY_LASER = registerBlock("ruby_laser", () -> new ObserverBlock(BlockBehaviour
+    public static final RegistrySupplier<Block> RUBY_LASER = registerBlock("ruby_laser", () -> new RubyLaserBlock(BlockBehaviour
     .Properties.copy(Blocks.COPPER_BLOCK)
     .noOcclusion()
     ));

@@ -9,8 +9,10 @@ import net.artienia.rubinated_nether.item.ModTabs;
 import net.artienia.rubinated_nether.recipe.ModRecipeSerializers;
 import net.artienia.rubinated_nether.recipe.ModRecipeTypes;
 import net.artienia.rubinated_nether.screen.ModMenuTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +44,9 @@ public final class RubinatedNether {
         FreezerBlockEntity.addItemFreezingTime(Blocks.PACKED_ICE, 3200);
 
         if(Platform.isModLoaded("aether")){
-            // TODO
-            //FreezerBlockEntity.addItemFreezingTime(AetherBlocks.ICESTONE.get(), 600);
+            // Scuffing this a little to avoid loading more dependencies
+            Block icestone = BuiltInRegistries.BLOCK.get(new ResourceLocation("aether", "icestone"));
+            FreezerBlockEntity.addItemFreezingTime(icestone, 600);
         }
     }
 

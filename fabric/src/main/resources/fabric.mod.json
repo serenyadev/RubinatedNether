@@ -1,17 +1,14 @@
 {
   "schemaVersion": 1,
-  "id": "rubinated_nether",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "Rubinated Nether",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "${name}",
+  "description": "${description}",
   "authors": [
-    "Me!"
+    "Artienia", "Juniper", "Darksonic300"
   ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
-  },
-  "license": "CC0-1.0",
+  "contact": {},
+  "license": "${license}",
   "icon": "assets/rubinated_nether/icon.png",
   "environment": "*",
   "entrypoints": {

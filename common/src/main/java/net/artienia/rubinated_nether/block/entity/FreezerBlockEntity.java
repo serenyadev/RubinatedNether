@@ -1,9 +1,6 @@
 package net.artienia.rubinated_nether.block.entity;
 
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectIntPair;
+import it.unimi.dsi.fastutil.objects.*;
 import net.artienia.rubinated_nether.RubinatedNether;
 import net.artienia.rubinated_nether.recipe.ModRecipeTypes;
 import net.artienia.rubinated_nether.screen.FreezerMenu;
@@ -50,6 +47,9 @@ public class FreezerBlockEntity extends AbstractFreezerBlockEntity implements Me
     }
 
     public static Object2IntMap<Item> getFreezingMap() {
+        // No need to do expensive iterations if there aren't any registered tags
+        if(tagFreezingMap.isEmpty()) return Object2IntMaps.unmodifiable(freezingMap);
+
         // Make a copy of the items map
         Object2IntMap<Item> allItems = new Object2IntOpenHashMap<>(freezingMap);
 
@@ -58,7 +58,7 @@ public class FreezerBlockEntity extends AbstractFreezerBlockEntity implements Me
             .flatMap(entry -> streamTagFuels(entry.getKey(), entry.getIntValue()))
             .forEach(pair -> allItems.put(pair.key(), pair.valueInt()));
 
-        return allItems;
+        return Object2IntMaps.unmodifiable(allItems);
     }
 
     private static Stream<ObjectIntPair<Item>> streamTagFuels(TagKey<Item> tag, int freezeTime) {
