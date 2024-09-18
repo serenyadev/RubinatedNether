@@ -16,6 +16,7 @@ loom {
         data {
             data()
             programArgs "--all", "--mod", "rubinated_nether"
+            programArgs "--existing", common.file("src/main/resources").getAbsolutePath()
             programArgs "--output", common.file("src/generated").getAbsolutePath()
         }
     }
