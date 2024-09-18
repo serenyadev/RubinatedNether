@@ -1,6 +1,7 @@
 package net.artienia.rubinated_nether.screen;
 
 import net.artienia.rubinated_nether.block.entity.FreezerBlockEntity;
+import net.artienia.rubinated_nether.platform.ModRecipeBookTypes;
 import net.artienia.rubinated_nether.recipe.FreezingRecipe;
 import net.artienia.rubinated_nether.recipe.ModRecipeTypes;
 import net.minecraft.world.Container;

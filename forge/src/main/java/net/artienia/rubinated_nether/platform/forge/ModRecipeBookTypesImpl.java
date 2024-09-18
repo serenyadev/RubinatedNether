@@ -1,4 +1,4 @@
-package net.artienia.rubinated_nether.screen.forge;
+package net.artienia.rubinated_nether.platform.forge;
 
 import net.minecraft.world.inventory.RecipeBookType;
 

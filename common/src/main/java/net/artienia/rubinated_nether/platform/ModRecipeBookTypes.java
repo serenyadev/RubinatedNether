@@ -1,4 +1,4 @@
-package net.artienia.rubinated_nether.screen;
+package net.artienia.rubinated_nether.platform;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.inventory.RecipeBookType;

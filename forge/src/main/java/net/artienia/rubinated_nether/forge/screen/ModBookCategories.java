@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import net.artienia.rubinated_nether.RubinatedNether;
 import net.artienia.rubinated_nether.item.ModItems;
 import net.artienia.rubinated_nether.recipe.ModRecipeTypes;
-import net.artienia.rubinated_nether.screen.ModRecipeBookTypes;
+import net.artienia.rubinated_nether.platform.ModRecipeBookTypes;
 import net.minecraft.client.RecipeBookCategories;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

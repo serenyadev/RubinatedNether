@@ -1,9 +1,14 @@
 package net.artienia.rubinated_nether.block.entity;
 
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.artienia.rubinated_nether.RubinatedNether;
 import net.artienia.rubinated_nether.recipe.ModRecipeTypes;
 import net.artienia.rubinated_nether.screen.FreezerMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.MenuProvider;
@@ -13,16 +18,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
 import java.util.stream.Stream;
 
 
-
 public class FreezerBlockEntity extends AbstractFreezerBlockEntity implements MenuProvider {
-    private static final Map<Item, Integer> freezingMap = new LinkedHashMap<>();
+    private static final Object2IntMap<Item> freezingMap = new Object2IntLinkedOpenHashMap<>();
+    private static final Object2IntMap<TagKey<Item>> tagFreezingMap = new Object2IntLinkedOpenHashMap<>();
 
     public FreezerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.FREEZER.get(), pos, state, ModRecipeTypes.FREEZING.get());
@@ -43,43 +45,51 @@ public class FreezerBlockEntity extends AbstractFreezerBlockEntity implements Me
         if (fuelStack.isEmpty() || !getFreezingMap().containsKey(fuelStack.getItem())) {
             return 0;
         } else {
-            return getFreezingMap().get(fuelStack.getItem());
+            return getFreezingMap().getInt(fuelStack.getItem());
         }
     }
 
-    public static Map<Item, Integer> getFreezingMap() {
-        return freezingMap;
+    public static Object2IntMap<Item> getFreezingMap() {
+        // Make a copy of the items map
+        Object2IntMap<Item> allItems = new Object2IntOpenHashMap<>(freezingMap);
+
+        // Iterate the tags and put items into copied map
+        tagFreezingMap.object2IntEntrySet().stream()
+            .flatMap(entry -> streamTagFuels(entry.getKey(), entry.getIntValue()))
+            .forEach(pair -> allItems.put(pair.key(), pair.valueInt()));
+
+        return allItems;
+    }
+
+    private static Stream<ObjectIntPair<Item>> streamTagFuels(TagKey<Item> tag, int freezeTime) {
+        return BuiltInRegistries.ITEM.getTag(tag)
+            .map(set -> set.stream().map(h -> ObjectIntPair.of(h.value(), freezeTime)))
+            .orElseGet(Stream::empty);
     }
 
     public static void addItemFreezingTime(ItemLike itemProvider, int burnTime) {
         Item item = itemProvider.asItem();
-        getFreezingMap().put(item, burnTime);
+        freezingMap.put(item, burnTime);
     }
 
     public static void addItemsFreezingTime(ItemLike[] itemProviders, int burnTime) {
-        Stream.of(itemProviders).map(ItemLike::asItem).forEach((item) -> getFreezingMap().put(item, burnTime));
+        Stream.of(itemProviders).map(ItemLike::asItem).forEach((item) -> freezingMap.put(item, burnTime));
     }
 
     public static void addItemTagFreezingTime(TagKey<Item> itemTag, int burnTime) {
-        ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        if (tags != null) {
-            tags.getTag(itemTag).stream().forEach((item) -> getFreezingMap().put(item, burnTime));
-        }
+        tagFreezingMap.put(itemTag, burnTime);
     }
 
     public static void removeItemFreezingTime(ItemLike itemProvider) {
         Item item = itemProvider.asItem();
-        getFreezingMap().remove(item);
+        freezingMap.removeInt(item);
     }
 
     public static void removeItemsFreezingTime(ItemLike[] itemProviders) {
-        Stream.of(itemProviders).map(ItemLike::asItem).forEach((item) -> getFreezingMap().remove(item));
+        Stream.of(itemProviders).map(ItemLike::asItem).forEach(freezingMap::removeInt);
     }
 
     public static void removeItemTagFreezingTime(TagKey<Item> itemTag) {
-        ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        if (tags != null) {
-            tags.getTag(itemTag).stream().forEach((item) -> getFreezingMap().remove(item));
-        }
+        tagFreezingMap.removeInt(itemTag);
     }
 }
