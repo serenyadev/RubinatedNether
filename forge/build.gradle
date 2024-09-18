@@ -11,6 +11,30 @@ loom {
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
         mixinConfig "rubinated_nether.mixins.json"
     }
+
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "rubinated_nether"
+            programArgs "--output", common.file("src/generated").getAbsolutePath()
+        }
+    }
+
+}
+
+sourceSets {
+    main {
+        // Platform specific generated files
+        resources {
+            srcDirs += [
+                    'src/main/generated'
+            ]
+            exclude ".cache/**"
+            exclude "**/.fabric"
+            exclude "**/.forge"
+
+        }
+    }
 }
 
 architectury {

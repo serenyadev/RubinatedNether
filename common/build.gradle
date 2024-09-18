@@ -6,6 +6,21 @@ loom {
     accessWidenerPath = file("src/main/resources/rubinatednether.accesswidener")
 }
 
+sourceSets {
+    main {
+        // Platform specific generated files
+        resources {
+            srcDirs += [
+                    'src/generated'
+            ]
+            exclude ".cache/**"
+            exclude "**/.fabric"
+            exclude "**/.forge"
+
+        }
+    }
+}
+
 dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.

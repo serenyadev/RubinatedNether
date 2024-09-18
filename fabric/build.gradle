@@ -12,6 +12,21 @@ loom {
     accessWidenerPath = common.file("src/main/resources/rubinatednether.accesswidener")
 }
 
+sourceSets {
+    main {
+        // Platform specific generated files
+        resources {
+            srcDirs += [
+                    'src/main/generated'
+            ]
+            exclude ".cache/**"
+            exclude "**/.fabric"
+            exclude "**/.forge"
+
+        }
+    }
+}
+
 configurations {
     common {
         canBeResolved = true
