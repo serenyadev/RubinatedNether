@@ -23,8 +23,8 @@ public final class RubinatedNether {
     public static void init() {
         LOGGER.info("Rubinating your nether");
 
-        ModItems.register();
         ModBlocks.register();
+        ModItems.register();
         ModTabs.init();
         ModMenuTypes.register();
         ModBlockEntityTypes.register();
