@@ -39,10 +39,9 @@ public class MagmaXP extends Block {
 
     public void spawnAfterBreak(BlockState pState, ServerLevel pLevel, BlockPos pPos, ItemStack pStack, boolean pDropExperience) {
         super.spawnAfterBreak(pState, pLevel, pPos, pStack, pDropExperience);
-    }
-
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return silkTouchLevel == 0 ? this.xpRange.sample(randomSource) : 0;
+        if(!EnchantmentHelper.hasSilkTouch(pStack)) {
+            tryDropExperience(pLevel, pPos, pStack, xpRange);
+        }
     }
 
     public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
